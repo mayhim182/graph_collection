@@ -1,0 +1,60 @@
+
+/*
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution
+{
+    public:
+        //O(log(height of bst))
+        int search(Node* node,int &data){
+            if(node){
+                if(node->data==data) return 1;
+                if(node->data>data) return search(node->left,data);
+                if(node->data<data) return search(node->right,data);
+            }
+            return 0;
+        }
+        
+        Node* searchNearest(Node* node,int &data,Node* ans){
+            if(node){
+                if(node->data < data)
+                    return searchNearest(node->right,data,node);
+                else
+                    return searchNearest(node->left,data,node);
+            }
+            return ans;
+        }
+        
+        Node* insert(Node* node, int data) {
+        
+            // Your code goes here
+            if(!node) return node;
+            
+            if(search(node,data)) return node;
+            
+            Node* temp = searchNearest(node,data,node);
+            Node* xtra = new Node(data);
+            
+            if(temp->data<data){
+                xtra->right = temp->right;
+                temp->right = xtra;
+            }
+            else{
+                xtra->left = temp->left;
+                temp->left = xtra;
+            }
+            
+            return node;
+    }
+
+};
